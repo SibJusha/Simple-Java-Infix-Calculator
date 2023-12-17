@@ -99,22 +99,8 @@ public class StackCalc {
                 if (ch == '-' && (StackOfOperators.isEmpty() || 
                                                 StackOfOperators.peek() == '(')) 
                 {
-                    //try {
-                    //    ch = Expression.charAt(++i);
-                    //} catch (IndexOutOfBoundsException e) {
-                    //    System.out.println("Некорректное окончание выражения");
-                    //    return 0;
-                    //}
-                    //if (!Character.isDigit(ch)) {
-                    //    StackOfOperators.push('-');
-                    //    i--;
-                    //    continue;
-                    //}
                     StackOfNumbers.push(0.0);
                     StackOfOperators.push('-');
-                    //Pair pair = ReadNumber(Expression, i);
-                    //i = pair.second;
-                    //StackOfNumbers.push(-pair.first);
                     continue;
                 }
                 if (StackOfOperators.isEmpty()) {
