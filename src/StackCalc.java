@@ -20,15 +20,19 @@ public class StackCalc {
     }
 
     private boolean SmallerOrSamePriority(char right, char left) {
-        return (left == right) || (right == '+' || right == '-') &&
-                                (left == '*' || left == '/');
+        return (left == right) || 
+            (right == '+' && left == '-') || 
+            (right == '-' && left == '+') || 
+            (right == '*' && left == '/') ||
+            (right == '/' && left == '*') ||
+            (right == '+' || right == '-') && (left == '*' || left == '/');
     }
 
     private boolean isOperator(char ch) {
         return (ch == '+' || ch == '-' || ch == '*' || ch == '/');
     }
 
-    private double Operation(char ch, double left, double right) {
+    private double Operation(char ch, double right, double left) {
         switch (ch) {
             case '*':
                 return left * right;
@@ -45,18 +49,38 @@ public class StackCalc {
     }
 
     private Pair ReadNumber(String Expression, int i) {
+        if (i >= Expression.length()) {
+            throw new IndexOutOfBoundsException("Нераспознаваемый символ на позиции " + i); 
+        }
         char ch = Expression.charAt(i);
         double number = 0;
+
         while (Character.isDigit(ch)) {
             number = number * 10 + (ch - '0');
-            ch = Expression.charAt(++i);
-        }
-        if (ch == '.') {
-            for (int j = 1; Character.isDigit(ch); j++) {
-                number += (ch - '0') / Math.pow(10, j);
-                ch = Expression.charAt(++i);
+            i++;
+            if (i < Expression.length()) {
+                ch = Expression.charAt(i);
+            } 
+            else {
+                break;
             }
         }
+        if (ch == '.') {
+            if (++i < Expression.length()) {
+                ch = Expression.charAt(i);
+            }
+            for (int j = 1; Character.isDigit(ch); j++) 
+            {
+                number += (ch - '0') / Math.pow(10, j);
+                i++;
+                if (i < Expression.length()) {
+                    ch = Expression.charAt(i);
+                } else {
+                    break;
+                }
+            }
+        }
+        
         return new Pair(number, --i);
     }
 
@@ -75,18 +99,39 @@ public class StackCalc {
                 if (ch == '-' && (StackOfOperators.isEmpty() || 
                                                 StackOfOperators.peek() == '(')) 
                 {
-                    Pair pair = ReadNumber(Expression, i);
-                    i = pair.second;
-                    StackOfNumbers.push(-pair.first);
+                    //try {
+                    //    ch = Expression.charAt(++i);
+                    //} catch (IndexOutOfBoundsException e) {
+                    //    System.out.println("Некорректное окончание выражения");
+                    //    return 0;
+                    //}
+                    //if (!Character.isDigit(ch)) {
+                    //    StackOfOperators.push('-');
+                    //    i--;
+                    //    continue;
+                    //}
+                    StackOfNumbers.push(0.0);
+                    StackOfOperators.push('-');
+                    //Pair pair = ReadNumber(Expression, i);
+                    //i = pair.second;
+                    //StackOfNumbers.push(-pair.first);
+                    continue;
                 }
                 if (StackOfOperators.isEmpty()) {
                     StackOfOperators.push(ch);
                     continue;
                 }
-                while (SmallerOrSamePriority(ch, StackOfOperators.peek())) {
-                    StackOfNumbers.push(Operation(StackOfOperators.pop(), 
+                while (!StackOfOperators.isEmpty() && 
+                                        SmallerOrSamePriority(ch, StackOfOperators.peek())) 
+                {
+                    try {
+                        StackOfNumbers.push(Operation(StackOfOperators.pop(), 
                                             StackOfNumbers.pop(), StackOfNumbers.pop()));
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
+                
                 StackOfOperators.push(ch);
             }
             else if (ch == '(') {
@@ -95,32 +140,43 @@ public class StackCalc {
             else if (ch == ')') {
                 double right = StackOfNumbers.pop();
                 char operator = StackOfOperators.pop();
+                
                 while (operator != '(') {
-                    right = Operation(operator, StackOfNumbers.pop(), right);
-                    operator = StackOfOperators.pop();
+                    try {
+                        right = Operation(operator, right, StackOfNumbers.pop());
+                        operator = StackOfOperators.pop();
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
+
                 StackOfNumbers.push(right);
             }
             else {
-                throw new IllegalArgumentException("Нераспознаваемый символ на позиции " + i);
+                System.out.println("Нераспознаваемый символ на позиции " + i);
             }
-
-            while (!StackOfOperators.isEmpty()) {
-                
-            }
-
-            return result;
         }
-
+        
+        while (!StackOfOperators.isEmpty()) {
+            try {
+                StackOfNumbers.push(Operation(StackOfOperators.pop(), 
+                                        StackOfNumbers.pop(), StackOfNumbers.pop()));
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        
+        result = StackOfNumbers.pop();
+        StackOfNumbers.clear();
+        StackOfOperators.clear();
         return result;
     }
 
     public static void main(String[] args) {
         StackCalc Calculator = new StackCalc();
-        if (args.length < 1) {
-            throw new IllegalArgumentException("Нет входного выражения (как аргумента)");
-        }
-        System.out.println(Calculator.Calculate(args[0]));
+        //System.out.println(Calculator.Calculate("2+2"));
+        //System.out.println(Calculator.Calculate("4+(221/17+15)/(3*4+(1+5)/2-1)"));
+        System.out.println(Calculator.Calculate("-5+(-(-2))"));
     }
 
 }
