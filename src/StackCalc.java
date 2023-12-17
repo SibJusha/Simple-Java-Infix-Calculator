@@ -160,9 +160,10 @@ public class StackCalc {
 
     public static void main(String[] args) {
         StackCalc Calculator = new StackCalc();
-        //System.out.println(Calculator.Calculate("2+2"));
-        //System.out.println(Calculator.Calculate("4+(221/17+15)/(3*4+(1+5)/2-1)"));
-        System.out.println(Calculator.Calculate("-5+(-(-2))"));
+        if (args.length < 1) {
+            throw new IllegalArgumentException("Нет входного выражения (как аргумента)");
+        }
+        System.out.println(Calculator.Calculate(args[0]));
     }
 
 }
