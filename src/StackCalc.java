@@ -84,7 +84,7 @@ public class StackCalc {
         return new NumberIndexPair(number, --i);
     }
 
-    public double calculate(String Expression) {
+    public double calculate(String Expression, int precision) {
         double result = 0;
 
         for (int i = 0; i < Expression.length(); i++) {
@@ -160,12 +160,21 @@ public class StackCalc {
                 }
             }
         }
-        
+
         result = StackOfNumbers.pop();
         StackOfNumbers.clear();
         StackOfOperators.clear();
 
+        if (precision >= 0) {
+            double scale = Math.pow(10, precision);
+            result = Math.round(result * scale) / scale;
+        }
+
         return result;
+    }
+
+    public double calculate(String Expression) {
+        return calculate(Expression, 12);
     }
 
     public static void main(String[] args) {

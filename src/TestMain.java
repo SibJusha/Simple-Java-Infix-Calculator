@@ -1,5 +1,10 @@
 public class TestMain {
 
+    public static double Test(String Expression, int precision) {
+        StackCalc Calculator = new StackCalc();
+        return Calculator.calculate(Expression, precision);
+    }
+    
     public static double Test(String Expression) {
         StackCalc Calculator = new StackCalc();
         return Calculator.calculate(Expression);
@@ -14,7 +19,7 @@ public class TestMain {
         }
 
         try {
-            double test_1 = Test("4+(221/17+15)/(3*4+(1+5)/2-1)");
+            double test_1 = Test("4+(221.221/17+15)/(3*4+(1+5)/2-1)", 5);
             System.out.println(test_1);
         } catch (Exception e) {
             System.out.println("Ошибка! " + e.getMessage());
