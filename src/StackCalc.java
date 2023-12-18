@@ -37,6 +37,9 @@ public class StackCalc {
             case '*':
                 return left * right;
             case '/':
+                if (right == 0) {
+                    throw new ArithmeticException("Деление на 0");
+                }
                 return left / right;
             case '+':
                 return left + right;
@@ -50,7 +53,9 @@ public class StackCalc {
 
     private NumberIndexPair ReadNumber(String Expression, int i) {
         if (i >= Expression.length()) {
-            throw new IndexOutOfBoundsException("Нераспознаваемый символ на позиции " + i); 
+            throw new IndexOutOfBoundsException(new StringBuilder()
+                                    .append("Нераспознаваемый символ на позиции ")
+                                    .append(i).toString());
         }
         char ch = Expression.charAt(i);
         double number = 0;
@@ -113,6 +118,8 @@ public class StackCalc {
                     try {
                         StackOfNumbers.push(Operation(StackOfOperators.pop(), 
                                             StackOfNumbers.pop(), StackOfNumbers.pop()));
+                    } catch (ArithmeticException e) {
+                        throw e;
                     } catch (Exception e) {
                         throw new IllegalArgumentException("Неправильная расстановка знаков");
                     }
@@ -134,6 +141,8 @@ public class StackCalc {
                     try {
                         right = Operation(operator, right, StackOfNumbers.pop());
                         operator = StackOfOperators.pop();
+                    } catch (ArithmeticException e) {
+                        throw e;
                     } catch (Exception e) {
                         throw new IllegalArgumentException("Неправильная расстановка знаков");
                     }
@@ -142,7 +151,9 @@ public class StackCalc {
                 StackOfNumbers.push(right);
             }
             else {
-                throw new IllegalArgumentException("Нераспознаваемый символ на позиции " + i);
+                throw new IllegalArgumentException(new StringBuilder()
+                                    .append("Нераспознаваемый символ на позиции ")
+                                    .append(i).toString());
             }
         }
 
@@ -152,6 +163,8 @@ public class StackCalc {
                 operator = StackOfOperators.pop();
                 StackOfNumbers.push(Operation(operator, 
                                         StackOfNumbers.pop(), StackOfNumbers.pop()));
+            } catch (ArithmeticException e) {
+                throw e;
             } catch (Exception e) {
                 if (operator == '(') {
                     throw new IllegalArgumentException("Нехватка закрывающих скобок");
@@ -179,10 +192,11 @@ public class StackCalc {
 
     public static void main(String[] args) {
         StackCalc Calculator = new StackCalc();
-        if (args.length < 1) {
-            throw new IllegalArgumentException("Нет входного выражения (как аргумента)");
-        }
-        System.out.println(Calculator.calculate(args[0]));
+        //if (args.length < 1) {
+        //    throw new IllegalArgumentException("Нет входного выражения (как аргумента)");
+        //}
+        //System.out.println(Calculator.calculate(args[0]));
+        System.out.println(Calculator.calculate("10/0"));
     }
 
 }

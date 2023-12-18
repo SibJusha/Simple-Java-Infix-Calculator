@@ -80,5 +80,12 @@ public class TestMain {
         } catch (Exception e) {
             System.out.println("Ошибка! " + e.getMessage());
         }
+
+        try {
+            double test_10 = Test("10/0");
+            System.out.println(test_10);
+        } catch (Exception e) {
+            System.out.println("Ошибка! " + e.getMessage());
+        }
     }
 }
