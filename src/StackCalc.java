@@ -114,7 +114,8 @@ public class StackCalc {
                         StackOfNumbers.push(Operation(StackOfOperators.pop(), 
                                             StackOfNumbers.pop(), StackOfNumbers.pop()));
                     } catch (Exception e) {
-                        System.out.println(e.getMessage());
+                        System.out.println("Неправильная расстановка знаков");
+                        return 0;
                     }
                 }
                 
@@ -124,6 +125,10 @@ public class StackCalc {
                 StackOfOperators.push(ch);
             }
             else if (ch == ')') {
+                if (StackOfOperators.isEmpty()) {
+                    System.out.println("Нехватка открывающих скобок");
+                    return 0;
+                }
                 double right = StackOfNumbers.pop();
                 char operator = StackOfOperators.pop();
                 
@@ -140,30 +145,40 @@ public class StackCalc {
             }
             else {
                 System.out.println("Нераспознаваемый символ на позиции " + i);
+                return 0;
             }
         }
-        
+
         while (!StackOfOperators.isEmpty()) {
+            char operator = 0;
             try {
-                StackOfNumbers.push(Operation(StackOfOperators.pop(), 
+                operator = StackOfOperators.pop();
+                StackOfNumbers.push(Operation(operator, 
                                         StackOfNumbers.pop(), StackOfNumbers.pop()));
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                if (operator == '(') {
+                    System.out.println("Нехватка закрывающих скобок");
+                } else {
+                    System.out.println("Неправильная расстановка знаков");
+                }
+                return 0;
             }
         }
         
         result = StackOfNumbers.pop();
         StackOfNumbers.clear();
         StackOfOperators.clear();
+
         return result;
     }
 
     public static void main(String[] args) {
         StackCalc Calculator = new StackCalc();
-        if (args.length < 1) {
-            throw new IllegalArgumentException("Нет входного выражения (как аргумента)");
-        }
-        System.out.println(Calculator.Calculate(args[0]));
+        //if (args.length < 1) {
+        //    throw new IllegalArgumentException("Нет входного выражения (как аргумента)");
+        //}
+        //System.out.println(Calculator.Calculate(args[0]));
+        System.out.println(Calculator.Calculate("2++7"));
     }
 
 }

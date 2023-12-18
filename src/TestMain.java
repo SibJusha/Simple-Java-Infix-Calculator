@@ -17,10 +17,22 @@ public class TestMain {
 
         double test_3 = Test("((2+2)-(-2-2))");
         System.out.println(test_3);
+        
+        double test_7 = Test("((2+3))");
+        System.out.println(test_7);
 
         //check error types
-        double test_4 = Test("((2+2)-(-2-2))");
+        double test_4 = Test("(2+3))*7");
         System.out.println(test_4);
+
+        double test_5 = Test("(2+3*7");
+        System.out.println(test_5);
+
+        double test_6 = Test("2+*7");
+        System.out.println(test_6);
         
+        double test_8 = Test("2++7");
+        System.out.println(test_8);
+
     }
 }
