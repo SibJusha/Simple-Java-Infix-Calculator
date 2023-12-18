@@ -1,8 +1,8 @@
-import java.util.ArrayDeque;
+import java.util.LinkedList;
 
 public class StackCalc {
-    private ArrayDeque<Double> StackOfNumbers;
-    private ArrayDeque<Character> StackOfOperators;
+    private LinkedList<Double> StackOfNumbers;
+    private LinkedList<Character> StackOfOperators;
 
     private class NumberIndexPair {
         double first;
@@ -15,8 +15,8 @@ public class StackCalc {
     }
 
     public StackCalc() {
-        StackOfNumbers = new ArrayDeque<>();
-        StackOfOperators = new ArrayDeque<>();
+        StackOfNumbers = new LinkedList<>();
+        StackOfOperators = new LinkedList<>();
     }
 
     private boolean SmallerOrSamePriority(char right, char left) {
