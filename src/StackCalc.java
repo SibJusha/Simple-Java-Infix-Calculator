@@ -101,8 +101,12 @@ public class StackCalc {
                 continue;
             }
             else if (isOperator(ch)) {
-                if (ch == '-' && (StackOfOperators.isEmpty() || 
-                                                StackOfOperators.peek() == '(')) 
+                char prev_char = 0;
+                if (i >= 1) {
+                    prev_char = Expression.charAt(--i);
+                    i++;
+                }
+                if (ch == '-' && (StackOfOperators.isEmpty() || prev_char == '(')) 
                 {
                     StackOfNumbers.push(0.0);
                     StackOfOperators.push('-');
@@ -187,7 +191,7 @@ public class StackCalc {
     }
 
     public double calculate(String Expression) {
-        return calculate(Expression, 12);
+        return calculate(Expression, 15);
     }
 
     public static void main(String[] args) {
@@ -196,7 +200,7 @@ public class StackCalc {
         //    throw new IllegalArgumentException("Нет входного выражения (как аргумента)");
         //}
         //System.out.println(Calculator.calculate(args[0]));
-        System.out.println(Calculator.calculate("10/0"));
+        System.out.println(Calculator.calculate("((2+2)-(-2-2))"));
     }
 
 }

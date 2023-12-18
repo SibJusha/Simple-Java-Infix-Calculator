@@ -12,7 +12,7 @@ public class TestMain {
 
     public static void main(String[] args) {
         try {
-            double test_0 = Test("2.1+2-2-2");
+            double test_0 = Test("2+2-2-2");
             System.out.println(test_0);
         } catch (Exception e) {
             System.out.println("Ошибка! " + e.getMessage());
@@ -33,7 +33,7 @@ public class TestMain {
         }
 
         try {
-            double test_3 = Test("((2+2)-(-2-2))");
+            double test_3 = Test("-((2+2)+((2+2)-(-2-2)))");
             System.out.println(test_3);
         } catch (Exception e) {
             System.out.println("Ошибка! " + e.getMessage());
@@ -84,6 +84,13 @@ public class TestMain {
         try {
             double test_10 = Test("10/0");
             System.out.println(test_10);
+        } catch (Exception e) {
+            System.out.println("Ошибка! " + e.getMessage());
+        }
+
+        try {
+            double test_11 = Test("-2*+7");
+            System.out.println(test_11);
         } catch (Exception e) {
             System.out.println("Ошибка! " + e.getMessage());
         }
